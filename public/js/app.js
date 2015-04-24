@@ -9,9 +9,15 @@ var app = angular.module('fileApp', ['angularFileUpload'], function() {
     app.controller('fileController', ['$scope', '$upload','$http', function ($scope, $upload,$http) {
 
         $scope.uploaded = [];
+        $scope.found = [];
+        $scope.search='';
+
 
         $scope.$watch('files', function () {
             $scope.upload($scope.files);
+
+
+
         });
 
         $scope.upload = function (files) {
@@ -27,11 +33,21 @@ var app = angular.module('fileApp', ['angularFileUpload'], function() {
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                     }).success(function (data, status, headers, config) {
                         console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-                        $scope.getfile();
+
                     });
                 }
             }
 
+
+        };
+
+        $scope.startSearch = function(){
+
+            $http.get('/search/'+$scope.search).
+                success(function(data, status, headers, config) {
+                    console.log(data);
+                   $scope.found =data.response.docs;
+                });
 
         };
 
@@ -41,6 +57,15 @@ var app = angular.module('fileApp', ['angularFileUpload'], function() {
                     $scope.uploaded = data;
                 });
         };
+
+
+        $scope.reindex = function(){
+            $http.get('/reindex').
+                success(function(data, status, headers, config) {
+                    console.log(data);
+                });
+        };
+
 
         $scope.getfile();
 

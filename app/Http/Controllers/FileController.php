@@ -30,26 +30,31 @@ class FileController extends BaseController
 
     public function getFile($name){
 
-        $file = Storage::get($name);
-        $headers = array(
-            'Content-Type' => $file->getMimeType()
-        );
-        return Response::download($file, $name , $headers);
+         $path = storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$name;
+
+
+         return response()->make(file_get_contents($path), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; '.$name,
+        ]);
 
     }
-
-
-    public function  testguz(){
+    public function  search($term){
 
         $client = new \GuzzleHttp\Client();
-        $res = $client->get('https://api.github.com/user', [
-            'auth' =>  ['andrea.terzani@gmail.com', 'giada123']
-        ]);
-        echo $res->getStatusCode();           // 200
-        echo $res->getHeader('content-type'); // 'application/json; charset=utf8'
-        echo $res->getBody();                 // {"type":"User"...'
-        return response()->$res;
+        $res = $client->get('http://localhost:8983/solr/test/select?wt=json&rows=25&q='.$term);
+
+        return  $res->getBody();
     }
+
+    public function  reindex(){
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->get('http://localhost:8983/solr/test/dataimport?command=full-import&wt=json');
+
+        return $res->getBody();
+    }
+
 
 
 }

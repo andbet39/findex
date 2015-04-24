@@ -10,26 +10,49 @@
     <script src="js/app.js"></script>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css">
 
 
     <title></title>
 </head>
 <body  ng-app="fileApp">
 
-<h1 style="text-align: center">FIndex.IO</h1>
+
+<div class="container" ng-controller="fileController">
+    <div class="row text-center">
+        <h1 class="col-lg-12">FIndex.IO</h1>
+    </div>
 
 
-<div ng-controller="fileController">
 
-    <div ng-file-drop ng-model="files" class="drop-box"
-         drag-over-class="dragover" ng-multiple="true" allow-dir="true"
-         accept="*">Drop files here</div>
+    <div class="row">
+        <div ng-file-drop ng-model="files" class="col-lg-12 drop-box"
+             drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+             accept="*">Drop files here
+        </div>
 
-    <ul>
-        <li ng-repeat="up in uploaded">{{up}}</li>
+
+
+        <div class="col-md-4 col-md-offset-4 searchbar">
+            <div class="input-group custom-search-form">
+                <input ng-model="search" type="text" class="form-control">
+              <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="startSearch()" type="button">
+                  <span class="glyphicon glyphicon-search"></span>
+              </button>
+             </span>
+            </div><!-- /input-group -->
+        </div>
+</div>
+
+
+
+     <ul>
+        <li ng-repeat="up in found"><a href="/file/{{up.filename}}"> {{up.filename}}</a></li>
     </ul>
 
  </div>
+</div>
 
 
 </body>

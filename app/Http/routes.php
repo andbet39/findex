@@ -16,5 +16,8 @@ $app->get('/', function() use ($app) {
 });
 
 $app->post('files', '\App\Http\Controllers\FileController@postFile');
+$app->get('file/{filename}', '\App\Http\Controllers\FileController@getFile');
 $app->get('listfile', '\App\Http\Controllers\FileController@getFileList');
 $app->get('testguz', '\App\Http\Controllers\FileController@testguz');
+$app->get('search/{term}', '\App\Http\Controllers\FileController@search');
+$app->get('reindex', '\App\Http\Controllers\FileController@reindex');

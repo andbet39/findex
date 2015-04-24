@@ -10,7 +10,6 @@
 .drop-box {
     background: #F8F8F8;
     border: 2px dashed #DDD;
-    width: 90%;
     height:300px;
     text-align: center;
     padding-top: 25px;
@@ -18,4 +17,9 @@
 }
 .dragover {
     border: 1px dashed #5e5e5e;
+}
+
+.searchbar{
+    position: relative;
+
 }
