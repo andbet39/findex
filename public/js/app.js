@@ -1,14 +1,15 @@
 /**
  * Created by andrea.terzani on 22/04/2015.
  */
-var app = angular.module('fileApp', ['angularFileUpload'], function() {
+var app = angular.module('fileApp', ['ngFileUpload','ui.bootstrap'], function() {
 
 });
 
 
-    app.controller('fileController', ['$scope', '$upload','$http', function ($scope, $upload,$http) {
+app.controller('fileController', ['$scope', 'Upload','$http', function ($scope, Upload,$http) {
 
-        $scope.uploaded = [];
+
+    $scope.uploaded = [];
         $scope.found = [];
         $scope.search='';
 
@@ -17,29 +18,49 @@ var app = angular.module('fileApp', ['angularFileUpload'], function() {
             $scope.upload($scope.files);
 
 
-
         });
 
         $scope.upload = function (files) {
             if (files && files.length) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
-                    $upload.upload({
-                        url: '/files',
-                        fields: {'username': $scope.username},
+
+                    Upload.upload({
+                        url: '/file',
                         file: file
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        evt.config.file.progress = progressPercentage;
+
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                     }).success(function (data, status, headers, config) {
                         console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-
+                        $scope.getfiles();
+                        $scope.reindex();
                     });
                 }
             }
-
-
         };
+
+
+        $scope.getfiles = function(){
+            $http.get('/list').
+                success(function(data, status, headers, config) {
+                    $scope.uploaded = data;
+                });
+        };
+
+
+        $scope.delete = function(name){
+            $http.get('/delete/'+ name).
+                success(function(data, status, headers, config) {
+                    $scope.getfiles();
+                    $scope.reindex();
+                });
+        };
+
+
+        $scope.getfiles();
 
         $scope.startSearch = function(){
 
@@ -51,12 +72,6 @@ var app = angular.module('fileApp', ['angularFileUpload'], function() {
 
         };
 
-        $scope.getfile = function(){
-            $http.get('/listfile').
-                success(function(data, status, headers, config) {
-                    $scope.uploaded = data;
-                });
-        };
 
 
         $scope.reindex = function(){
@@ -67,7 +82,6 @@ var app = angular.module('fileApp', ['angularFileUpload'], function() {
         };
 
 
-        $scope.getfile();
 
     }]);
 

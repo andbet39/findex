@@ -15,9 +15,13 @@ $app->get('/', function() use ($app) {
     return $app->welcome();
 });
 
-$app->post('files', '\App\Http\Controllers\FileController@postFile');
-$app->get('file/{filename}', '\App\Http\Controllers\FileController@getFile');
-$app->get('listfile', '\App\Http\Controllers\FileController@getFileList');
+$app->post('file', '\App\Http\Controllers\FileController@saveFile');
+$app->get('list', '\App\Http\Controllers\FileController@getFileList');
+$app->get('view/{filename}', '\App\Http\Controllers\FileController@viewFile');
+$app->get('delete/{filename}', '\App\Http\Controllers\FileController@deleteFile');
+
+
+
 $app->get('testguz', '\App\Http\Controllers\FileController@testguz');
 $app->get('search/{term}', '\App\Http\Controllers\FileController@search');
 $app->get('reindex', '\App\Http\Controllers\FileController@reindex');

@@ -11,34 +11,41 @@ use Request;
 class FileController extends BaseController
 {
 
-    public function postFile()
+    public function saveFile()
     {
-
         $file = Request::file('file');
         Storage::disk('local')->put($file->getClientOriginalName(),  File::get($file));
 
         return response()->json('success');
     }
 
+    public function deleteFile($name)
+    {
+        Storage::disk('local')->delete($name);
+        return response()->json('success');
+    }
+
 
     public function getFileList(){
 
-        $files = Storage::files('/');
+        $files = Storage::disk('local')->files('/');
         return response()->json($files);
 
     }
 
-    public function getFile($name){
+    public function viewFile($name){
 
-         $path = storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$name;
-
-
-         return response()->make(file_get_contents($path), 200, [
-            'Content-Type' => 'application/pdf',
+        return response()->make(Storage::disk('local')->get($name), 200, [
+            'Content-Type' => Storage::disk('local')->mimeType($name),
             'Content-Disposition' => 'inline; '.$name,
         ]);
 
     }
+
+
+
+
+
     public function  search($term){
 
         $client = new \GuzzleHttp\Client();
