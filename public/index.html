@@ -60,7 +60,7 @@
 
     <div class="row">
         <div class="col-md-12" ng-repeat="file in files">
-            <div ng-show="file.progress <100">
+            <div>
                 <progressbar max="100" value="file.progress"><span style="color:black; white-space:nowrap;">{{file.name}} - {{file.progress}} / 100</span>
                 </progressbar>
             </div>
